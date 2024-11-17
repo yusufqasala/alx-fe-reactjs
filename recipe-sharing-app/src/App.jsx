@@ -4,6 +4,8 @@ import AddRecipeForm from "./components/AddRecipeForm";
 import RecipeDetails from "./components/RecipeDetails";
 import EditRecipeForm from "./components/EditRecipeForm";
 import SearchBar from "./components/SearchBar";
+import FavoritesList from "./components/FavoritesList";
+import RecommendationsList from "./components/RecommendationsList";
 
 function App() {
   return (
@@ -30,6 +32,14 @@ function App() {
         <SearchBar />
         <AddRecipeForm />
         <RecipeList />
+      </div>
+
+      <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
+        <h1>Recipe Sharing Application</h1>
+        <AddRecipeForm />
+        <RecipeList />
+        <FavoritesList />
+        <RecommendationsList />
       </div>
     </Router>
   );
