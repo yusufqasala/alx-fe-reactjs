@@ -1,26 +1,15 @@
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
-import ProtectedRoute from "./components/ProtectedRoute ";
+import Profile from "./components/profile";
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/profile/*" element={<Profile />} />
-
-      <Route path="/" element={<Home />} />
-      <Route
-        path="/profile/*"
-        element={
-          <ProtectedRoute isAuthenticated={isAuthenticated}>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route path="/profile/:userId" element={<User />} />
-    </Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile/*" element={<Profile />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
