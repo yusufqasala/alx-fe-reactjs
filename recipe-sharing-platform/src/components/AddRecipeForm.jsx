@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 const AddRecipeForm = () => {
   const [formData, setFormData] = useState({
@@ -8,34 +8,29 @@ const AddRecipeForm = () => {
   });
   const [errors, setErrors] = useState({});
 
-  // Handle input changes
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; // Correct usage of e.target.value
     setFormData({ ...formData, [name]: value });
   };
 
-  // Validate and submit the form
   const handleSubmit = (e) => {
     e.preventDefault();
     const newErrors = {};
 
-    // Validate fields
     if (!formData.title.trim()) newErrors.title = "Title is required.";
     if (!formData.ingredients.trim()) newErrors.ingredients = "Ingredients are required.";
     if (!formData.steps.trim()) newErrors.steps = "Preparation steps are required.";
 
-    // Ingredients validation (at least 2 items)
     if (formData.ingredients.trim() && formData.ingredients.split(",").length < 2) {
       newErrors.ingredients = "Please include at least 2 ingredients (comma-separated).";
     }
 
     setErrors(newErrors);
 
-    // If no errors, log the data or process the submission
     if (Object.keys(newErrors).length === 0) {
       console.log("Form submitted:", formData);
       alert("Recipe submitted successfully!");
-      setFormData({ title: "", ingredients: "", steps: "" }); // Clear form
+      setFormData({ title: "", ingredients: "", steps: "" });
     }
   };
 
@@ -43,7 +38,6 @@ const AddRecipeForm = () => {
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-8">
       <h1 className="text-2xl font-bold mb-6 text-center">Submit a New Recipe</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Recipe Title */}
         <div>
           <label className="block text-sm font-medium text-gray-700">Recipe Title</label>
           <input
@@ -56,7 +50,6 @@ const AddRecipeForm = () => {
           {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title}</p>}
         </div>
 
-        {/* Ingredients */}
         <div>
           <label className="block text-sm font-medium text-gray-700">
             Ingredients <span className="text-gray-500">(comma-separated)</span>
@@ -73,7 +66,6 @@ const AddRecipeForm = () => {
           )}
         </div>
 
-        {/* Preparation Steps */}
         <div>
           <label className="block text-sm font-medium text-gray-700">Preparation Steps</label>
           <textarea
@@ -86,7 +78,6 @@ const AddRecipeForm = () => {
           {errors.steps && <p className="text-sm text-red-500 mt-1">{errors.steps}</p>}
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
@@ -99,3 +90,4 @@ const AddRecipeForm = () => {
 };
 
 export default AddRecipeForm;
+
