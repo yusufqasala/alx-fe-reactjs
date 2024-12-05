@@ -18,7 +18,7 @@ const AddRecipeForm = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; // Correctly using target.value
     setFormData({ ...formData, [name]: value });
   };
 
@@ -36,36 +36,34 @@ const AddRecipeForm = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg mt-8">
-      <h1 className="text-2xl font-bold mb-6 text-center md:text-3xl">Submit a New Recipe</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-        <div className="md:flex md:space-x-4">
-          <div className="md:flex-1">
-            <label className="block text-sm font-medium text-gray-700">Recipe Title</label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-            {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title}</p>}
-          </div>
+      <h1 className="text-2xl font-bold mb-6 text-center">Submit a New Recipe</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Recipe Title</label>
+          <input
+            type="text"
+            name="title"
+            value={formData.title}
+            onChange={handleChange} // Properly tracks input changes
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title}</p>}
         </div>
 
-        <div className="md:flex md:space-x-4">
-          <div className="md:flex-1">
-            <label className="block text-sm font-medium text-gray-700">
-              Ingredients <span className="text-gray-500">(comma-separated)</span>
-            </label>
-            <textarea
-              name="ingredients"
-              value={formData.ingredients}
-              onChange={handleChange}
-              rows="3"
-              className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            ></textarea>
-            {errors.ingredients && <p className="text-sm text-red-500 mt-1">{errors.ingredients}</p>}
-          </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">
+            Ingredients <span className="text-gray-500">(comma-separated)</span>
+          </label>
+          <textarea
+            name="ingredients"
+            value={formData.ingredients}
+            onChange={handleChange} // Properly tracks input changes
+            rows="3"
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+          {errors.ingredients && (
+            <p className="text-sm text-red-500 mt-1">{errors.ingredients}</p>
+          )}
         </div>
 
         <div>
@@ -73,7 +71,7 @@ const AddRecipeForm = () => {
           <textarea
             name="steps"
             value={formData.steps}
-            onChange={handleChange}
+            onChange={handleChange} // Properly tracks input changes
             rows="5"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           ></textarea>
@@ -82,7 +80,7 @@ const AddRecipeForm = () => {
 
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors md:w-auto md:px-6"
+          className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors"
         >
           Submit Recipe
         </button>
@@ -92,3 +90,4 @@ const AddRecipeForm = () => {
 };
 
 export default AddRecipeForm;
+
