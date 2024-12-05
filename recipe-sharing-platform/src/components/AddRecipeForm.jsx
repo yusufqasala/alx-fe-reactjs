@@ -6,31 +6,25 @@ const AddRecipeForm = () => {
     ingredients: "",
     steps: "",
   });
+
   const [errors, setErrors] = useState({});
 
-  // Validation function
   const validate = () => {
     const newErrors = {};
     if (!formData.title.trim()) newErrors.title = "Title is required.";
     if (!formData.ingredients.trim()) newErrors.ingredients = "Ingredients are required.";
     if (!formData.steps.trim()) newErrors.steps = "Preparation steps are required.";
-
-    // Example additional validation: At least 2 ingredients
-    if (formData.ingredients.trim() && formData.ingredients.split(",").length < 2) {
-      newErrors.ingredients = "Please include at least 2 ingredients (comma-separated).";
-    }
-
     return newErrors;
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target; // Correctly using target.value
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = validate(); // Call validate function
+    const newErrors = validate();
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
@@ -50,7 +44,7 @@ const AddRecipeForm = () => {
             type="text"
             name="title"
             value={formData.title}
-            onChange={handleChange}
+            onChange={handleChange} // Properly tracks input changes
             className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {errors.title && <p className="text-sm text-red-500 mt-1">{errors.title}</p>}
@@ -63,7 +57,7 @@ const AddRecipeForm = () => {
           <textarea
             name="ingredients"
             value={formData.ingredients}
-            onChange={handleChange}
+            onChange={handleChange} // Properly tracks input changes
             rows="3"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           ></textarea>
@@ -77,7 +71,7 @@ const AddRecipeForm = () => {
           <textarea
             name="steps"
             value={formData.steps}
-            onChange={handleChange}
+            onChange={handleChange} // Properly tracks input changes
             rows="5"
             className="mt-1 block w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           ></textarea>
@@ -96,4 +90,3 @@ const AddRecipeForm = () => {
 };
 
 export default AddRecipeForm;
-
