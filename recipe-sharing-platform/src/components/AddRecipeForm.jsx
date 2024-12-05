@@ -8,23 +8,29 @@ const AddRecipeForm = () => {
   });
   const [errors, setErrors] = useState({});
 
+  // Validation function
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.title.trim()) newErrors.title = "Title is required.";
+    if (!formData.ingredients.trim()) newErrors.ingredients = "Ingredients are required.";
+    if (!formData.steps.trim()) newErrors.steps = "Preparation steps are required.";
+
+    // Example additional validation: At least 2 ingredients
+    if (formData.ingredients.trim() && formData.ingredients.split(",").length < 2) {
+      newErrors.ingredients = "Please include at least 2 ingredients (comma-separated).";
+    }
+
+    return newErrors;
+  };
+
   const handleChange = (e) => {
-    const { name, value } = e.target; // Correct usage of e.target.value
+    const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newErrors = {};
-
-    if (!formData.title.trim()) newErrors.title = "Title is required.";
-    if (!formData.ingredients.trim()) newErrors.ingredients = "Ingredients are required.";
-    if (!formData.steps.trim()) newErrors.steps = "Preparation steps are required.";
-
-    if (formData.ingredients.trim() && formData.ingredients.split(",").length < 2) {
-      newErrors.ingredients = "Please include at least 2 ingredients (comma-separated).";
-    }
-
+    const newErrors = validate(); // Call validate function
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
