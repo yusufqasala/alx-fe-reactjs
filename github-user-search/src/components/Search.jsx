@@ -45,6 +45,37 @@ function Search() {
       </form>
 
       {/* Results Section */}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {results && results.length > 0 ? (
+          results.map((user) => (
+            <div
+              key={user.id}
+              className="p-4 border rounded shadow-md flex flex-col items-center"
+            >
+              <img
+                src={user.avatar_url}
+                alt={user.login}
+                className="w-24 h-24 rounded-full"
+              />
+              <h2 className="mt-2 text-lg font-semibold">{user.login}</h2>
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 mt-1"
+              >
+                View Profile
+              </a>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500 mt-4">
+            No results found. Please try again.
+          </p>
+        )}
+      </div>
+      
       <div className="mt-6">
         {loading && <p className="text-gray-500">Loading...</p>}
         {error && <p className="text-red-500">Looks like we can't find the user.</p>}
