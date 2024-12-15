@@ -1,11 +1,11 @@
-import { useState } from 'react';
-import SearchComponent from './components/SearchComponent';
+import React, { useState } from 'react';
+import Search from './components/Search';
 import { fetchUserData } from './services/githubService';
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isError, setIsError] = useState(false); // Renamed to clarify its purpose
+  const [user, setUser] = useState(null); // Holds user data
+  const [loading, setLoading] = useState(false); // Tracks loading state
+  const [isError, setIsError] = useState(false); // Tracks error state
 
   const handleSearch = async (username) => {
     setLoading(true);
@@ -25,15 +25,23 @@ function App() {
   return (
     <div>
       <h1>GitHub User Search</h1>
-      <SearchComponent onSearch={handleSearch} />
+      <Search onSearch={handleSearch} />
       {loading && <p>Loading...</p>}
-      {isError && <p>Looks like we can not find the user.</p>}
+      {isError && <p>Looks like we can't find the user.</p>}
       {user && (
         <div>
-          <img src={user.avatar_url} alt={`${user.login}'s avatar`} width="100" />
+          <img
+            src={user.avatar_url}
+            alt={`${user.login}'s avatar`}
+            width="100"
+          />
           <h2>{user.name || user.login}</h2>
           <p>
-            <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+            <a
+              href={user.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Visit GitHub Profile
             </a>
           </p>
@@ -44,4 +52,3 @@ function App() {
 }
 
 export default App;
-
