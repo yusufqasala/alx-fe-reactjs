@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-function SearchComponent({ onSearch }) {
+function Search({ onSearch }) {
   const [query, setQuery] = useState('');
 
   const handleSubmit = (e) => {
@@ -24,8 +24,8 @@ function SearchComponent({ onSearch }) {
   );
 }
 
-SearchComponent.propTypes = {
+Search.propTypes = {
   onSearch: PropTypes.func.isRequired,
 };
 
-export default SearchComponent;
+export default Search;
