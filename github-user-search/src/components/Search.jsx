@@ -1,67 +1,89 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { fetchUserData } from "../services/githubService";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
-function Search() {
-  const [query, setQuery] = useState("");
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+function Search({ onSearch, results }) {
+  const [username, setUsername] = useState('');
+  const [location, setLocation] = useState('');
+  const [minRepos, setMinRepos] = useState('');
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!query.trim()) return;
-
-    setLoading(true);
-    setError(false);
-    setUser(null);
-
-    try {
-      const userData = await fetchUserData(query);
-      setUser(userData);
-    } catch {
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+    onSearch({ username, location, minRepos });
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="p-6 bg-gray-100 rounded-md shadow-md">
+      {/* Search Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col md:flex-row gap-4 justify-center items-center"
+      >
         <input
           type="text"
-          placeholder="Enter GitHub username..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          placeholder="GitHub Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full md:w-1/3 p-2 border rounded"
         />
-        <button type="submit">Search</button>
+        <input
+          type="text"
+          placeholder="Location (e.g., London)"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+          className="w-full md:w-1/3 p-2 border rounded"
+        />
+        <input
+          type="number"
+          placeholder="Min Repositories"
+          value={minRepos}
+          onChange={(e) => setMinRepos(e.target.value)}
+          className="w-full md:w-1/3 p-2 border rounded"
+        />
+        <button
+          type="submit"
+          className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
+        >
+          Search
+        </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>Looks like we cant find the user.</p>}
-
-      {user && (
-        <div>
-          <img
-            src={user.avatar_url}
-            alt={`${user.login}'s avatar`}
-            width="100"
-          />
-          <h2>{user.login}</h2>
-          <p>
-            <a href={user.html_url} target="_blank" rel="noopener noreferrer">
-              Visit GitHub Profile
-            </a>
+      {/* Results Rendering */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {results && results.length > 0 ? (
+          results.map((user) => (
+            <div
+              key={user.id}
+              className="p-4 border rounded shadow-md flex flex-col items-center"
+            >
+              <img
+                src={user.avatar_url}
+                alt={user.login}
+                className="w-24 h-24 rounded-full"
+              />
+              <h2 className="mt-2 text-lg font-semibold">{user.login}</h2>
+              <a
+                href={user.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 mt-1"
+              >
+                View Profile
+              </a>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-gray-500 mt-4">
+            No results found. Please try again.
           </p>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
 
 Search.propTypes = {
-  onSearch: PropTypes.func,
+  onSearch: PropTypes.func.isRequired,
+  results: PropTypes.array.isRequired,
 };
 
 export default Search;
