@@ -1,56 +1,67 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useState } from "react";
+import PropTypes from "prop-types";
+import { fetchUserData } from "../services/githubService";
 
-function Search({ onSearch }) {
-  const [username, setUsername] = useState('');
-  const [location, setLocation] = useState('');
-  const [minRepos, setMinRepos] = useState('');
+function Search() {
+  const [query, setQuery] = useState("");
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSearch({ username, location, minRepos });
+    if (!query.trim()) return;
+
+    setLoading(true);
+    setError(false);
+    setUser(null);
+
+    try {
+      const userData = await fetchUserData(query);
+      setUser(userData);
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="p-6 bg-gray-100 rounded-md shadow-md">
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col md:flex-row gap-4 justify-center items-center"
-      >
+    <div>
+      <form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="GitHub Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full md:w-1/3 p-2 border rounded"
+          placeholder="Enter GitHub username..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Location (e.g., London)"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          className="w-full md:w-1/3 p-2 border rounded"
-        />
-        <input
-          type="number"
-          placeholder="Min Repositories"
-          value={minRepos}
-          onChange={(e) => setMinRepos(e.target.value)}
-          className="w-full md:w-1/3 p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
-        >
-          Search
-        </button>
+        <button type="submit">Search</button>
       </form>
+
+      {loading && <p>Loading...</p>}
+      {error && <p>Looks like we cant find the user.</p>}
+
+      {user && (
+        <div>
+          <img
+            src={user.avatar_url}
+            alt={`${user.login}'s avatar`}
+            width="100"
+          />
+          <h2>{user.login}</h2>
+          <p>
+            <a href={user.html_url} target="_blank" rel="noopener noreferrer">
+              Visit GitHub Profile
+            </a>
+          </p>
+        </div>
+      )}
     </div>
   );
 }
 
 Search.propTypes = {
-  onSearch: PropTypes.func.isRequired,
+  onSearch: PropTypes.func,
 };
 
 export default Search;
