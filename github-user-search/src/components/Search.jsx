@@ -1,25 +1,24 @@
-import { useState } from "react";
-import PropTypes from "prop-types";
-import { fetchUserData } from "../services/githubService";
+import React, { useState } from 'react';
+import axios from 'axios';
 
 function Search() {
-  const [query, setQuery] = useState("");
-  const [user, setUser] = useState(null);
+  const [username, setUsername] = useState('');
+  const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!query.trim()) return;
-
+  // Handle the search with async/await
+  const handleSearch = async (e) => {
+    e.preventDefault(); // Prevent form reload
     setLoading(true);
     setError(false);
-    setUser(null);
+    setResults(null);
 
     try {
-      const userData = await fetchUserData(query);
-      setUser(userData);
-    } catch {
+      // API call using async/await
+      const response = await axios.get(`https://api.github.com/users/${username}`);
+      setResults(response.data);
+    } catch (err) {
       setError(true);
     } finally {
       setLoading(false);
@@ -27,41 +26,49 @@ function Search() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="p-6 bg-gray-100 rounded-md shadow-md">
+      {/* Search Form */}
+      <form onSubmit={handleSearch} className="flex flex-col gap-4 items-center">
         <input
           type="text"
-          placeholder="Enter GitHub username..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Enter GitHub Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="w-full p-2 border rounded"
         />
-        <button type="submit">Search</button>
+        <button
+          type="submit"
+          className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
+        >
+          Search
+        </button>
       </form>
 
-      {loading && <p>Loading...</p>}
-      {error && <p>Looks like we cant find the user.</p>}
-
-      {user && (
-        <div>
-          <img
-            src={user.avatar_url}
-            alt={`${user.login}'s avatar`}
-            width="100"
-          />
-          <h2>{user.login}</h2>
-          <p>
-            <a href={user.html_url} target="_blank" rel="noopener noreferrer">
-              Visit GitHub Profile
+      {/* Results Section */}
+      <div className="mt-6">
+        {loading && <p className="text-gray-500">Loading...</p>}
+        {error && <p className="text-red-500">Looks like we can't find the user.</p>}
+        {results && (
+          <div className="flex flex-col items-center p-4 border rounded shadow">
+            <img
+              src={results.avatar_url}
+              alt={results.login}
+              className="w-24 h-24 rounded-full"
+            />
+            <h2 className="mt-2 text-lg font-semibold">{results.login}</h2>
+            <a
+              href={results.html_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 mt-2"
+            >
+              View Profile
             </a>
-          </p>
-        </div>
-      )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-
-Search.propTypes = {
-  onSearch: PropTypes.func,
-};
 
 export default Search;
