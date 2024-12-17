@@ -15,7 +15,7 @@ export const fetchUserData = async (searchTerm, location = '', minRepos = 0) => 
     }
 
     // Ensure the API endpoint matches the required string
-    const url = `${BASE_URL}?q=${query}`;
+    const url = `${https://api.github.com/search/users?q}?q=${query}`;
 
     console.log('API Request URL:', url); // Debugging
 
