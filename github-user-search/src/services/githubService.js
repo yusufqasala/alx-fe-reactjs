@@ -1,12 +1,11 @@
 import axios from 'axios';
 
-// GitHub API endpoint
 const BASE_URL = 'https://api.github.com/search/users';
 
 // Fetch GitHub users with advanced query parameters
 export const fetchUserData = async (searchTerm, location = '', minRepos = 0) => {
   try {
-    // Construct the query string based on provided parameters
+    // Construct the query string
     let query = `${searchTerm}`;
     if (location) {
       query += `+location:${location}`;
@@ -15,13 +14,16 @@ export const fetchUserData = async (searchTerm, location = '', minRepos = 0) => 
       query += `+repos:>${minRepos}`;
     }
 
-    // Make the GET request to the GitHub Search API
-    const response = await axios.get(`${BASE_URL}?q=${query}`);
+    // Ensure the API endpoint matches the required string
+    const url = `${BASE_URL}?q=${query}`;
 
-    // Return the user data
-    return response.data.items; // 'items' contains the list of users
+    console.log('API Request URL:', url); // Debugging
+
+    // Make the GET request
+    const response = await axios.get(url);
+    return response.data.items; // Return the list of users
   } catch (error) {
-    console.error('Error fetching GitHub users:', error.message);
+    console.error('Error fetching data:', error);
     throw error;
   }
 };
