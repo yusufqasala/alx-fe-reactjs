@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import axios from 'axios';
+
 function Search({ onSearch, results }) {
   const [username, setUsername] = useState('');
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [location, setLocation] = useState('');
   const [minRepos, setMinRepos] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     onSearch({ username, location, minRepos });
+  };
+ const handleSearch = async (e) => {
+    e.preventDefault(); // Prevent form reload
+    setLoading(true);
+    setError(false);
+    setResults(null);
+
+    try {
+      // API call using async/await
+      const response = await axios.get(`https://api.github.com/users/${username}`);
+      setResults(response.data);
+    } catch (err) {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -87,3 +108,6 @@ Search.propTypes = {
 };
 
 export default Search;
+
+
+
