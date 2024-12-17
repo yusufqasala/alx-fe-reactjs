@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import { fetchUserData } from '../services/githubService';
 import axios from 'axios';
 
 function Search({ onSearch, results }) {
@@ -27,6 +27,18 @@ function Search({ onSearch, results }) {
       setResults(response.data);
     } catch (err) {
       setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  
+    try {
+      const data = await fetchUserData(searchTerm, location, minRepos);
+      setResults(data); 
+    } catch (err) {
+      setError('Failed to fetch user data.');
+      console.error(err);
     } finally {
       setLoading(false);
     }
